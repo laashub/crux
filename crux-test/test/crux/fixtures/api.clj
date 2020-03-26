@@ -20,6 +20,12 @@
     (crux/await-tx *api* tx)
     tx))
 
+(defn delete-all-entities []
+  (let [db (crux/db *api*)]
+    (doseq [eids (partition-all 1000 (map first (crux/q db '{:find [e]
+                                                             :where [[e :crux.db/id]]})))]
+      (submit+await-tx (mapv (partial vector :crux.tx/delete) eids)))))
+
 ;; Literal vectors aren't type hinted as List in Clojure, and cannot
 ;; be type hinted without via a var.
 (defn vec->array-list ^java.util.List [^List v]
