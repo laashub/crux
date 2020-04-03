@@ -6,6 +6,7 @@
             [integrant.repl :as ir :refer [clear go suspend resume halt reset reset-all]]
             [crux.io :as cio]
             [crux.kafka.embedded :as ek]
+            [crux.calcite :as cal]
             [clojure.java.io :as io])
   (:import (crux.api ICruxAPI)
            (java.io Closeable)))
@@ -23,7 +24,8 @@
 
 (def standalone-config
   {:node {:crux.node/topology ['crux.standalone/topology
-                               'crux.kv.rocksdb/kv-store]
+                               'crux.kv.rocksdb/kv-store
+                               'crux.calcite/module]
           :crux.kv/db-dir (str (io/file dev-node-dir "db"))
           :crux.standalone/event-log-dir (str (io/file dev-node-dir "event-log"))
           :crux.kv/sync? true}})
